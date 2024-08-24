@@ -13,7 +13,7 @@ function App() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [tokenLocalStorageValue, setTokenLocalStorageValue] = useLocalStorage<
-    { access_token: string } | undefined
+    { access_token: string; refresh_token: string } | undefined
   >("spAuth", undefined);
 
   function handleLogin() {
@@ -32,7 +32,9 @@ function App() {
   }
 
   useEffect(() => {
-    if (searchParams.has("code")) getToken();
+    if (searchParams.has("code")) {
+      getToken();
+    }
 
     async function getToken() {
       const token = await authenticateSpotify(searchParams.get("code")!);
@@ -40,14 +42,22 @@ function App() {
       setTokenLocalStorageValue(token);
       navigate("/");
     }
-  }, [searchParams, navigate, setTokenLocalStorageValue]);
+  }, [
+    searchParams,
+    navigate,
+    setTokenLocalStorageValue,
+    tokenLocalStorageValue,
+  ]);
 
   return (
     <>
       <Header />
       <main className="flex items-center justify-start min-h-screen flex-col relative px-8 py-4">
         {tokenLocalStorageValue ? (
-          <Stats spotifyToken={tokenLocalStorageValue.access_token} />
+          <Stats
+            spotifyToken={tokenLocalStorageValue.access_token}
+            spotifyRefreshToken={tokenLocalStorageValue.refresh_token}
+          />
         ) : (
           <Login handleLogin={handleLogin} />
         )}

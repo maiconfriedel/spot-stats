@@ -25,3 +25,26 @@ export async function authenticateSpotify(code: string) {
 
   return response.data
 }
+
+export async function refreshToken(refreshToken: string) {
+  const response = await axios.post(
+    "https://accounts.spotify.com/api/token",
+    querystring.stringify({
+      refresh_token: refreshToken,
+      grant_type: "refresh_token",
+    }),
+    {
+      headers: {
+        Authorization:
+          "Basic " +
+          Buffer.from(
+            import.meta.env.VITE_SPOTIFY_CLIENT_ID +
+            ":" +
+            import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
+          ).toString("base64"),
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    })
+
+  return response.data
+}

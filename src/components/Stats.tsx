@@ -8,27 +8,82 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { getTopSongs, Item } from "@/utils/getTopSongs";
+import { useEffect, useMemo, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
+import SongList from "./SongList";
 
 interface StatsProps {
   spotifyToken: string;
+  spotifyRefreshToken: string;
 }
 
 export function Stats({ spotifyToken }: StatsProps) {
+  const [shortTermSongs, setShortTermSongs] = useState<Item[]>([]);
+  const [mediumTermSongs, setMediumTermSongs] = useState<Item[]>([]);
+  const [longTermSongs, setLongTermSongs] = useState<Item[]>([]);
+  const [timeRange, setTimeRange] = useState("short_term");
+  const [, , removeTokenLocalStorageValue] = useLocalStorage<
+    { access_token: string; refresh_token: string } | undefined
+  >("spAuth", undefined);
+  const { toast } = useToast();
+
+  const getSongs = useMemo(
+    () => async () => {
+      if (spotifyToken) {
+        try {
+          const response = await getTopSongs(spotifyToken, timeRange);
+
+          if (response) {
+            switch (timeRange) {
+              case "short_term":
+                setShortTermSongs(response);
+                break;
+              case "medium_term":
+                setMediumTermSongs(response);
+                break;
+              case "long_term":
+                setLongTermSongs(response);
+                break;
+            }
+          }
+        } catch {
+          removeTokenLocalStorageValue();
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "Please login with Spotify again.",
+          });
+        }
+      }
+    },
+    [spotifyToken, timeRange, removeTokenLocalStorageValue, toast]
+  );
+
   useEffect(() => {
-    console.log("spotifyToken", spotifyToken);
-  }, [spotifyToken]);
+    getSongs();
+  }, [getSongs]);
+
+  function handleChangeTab(value: string) {
+    setTimeRange(value);
+    getSongs();
+  }
 
   return (
-    <Tabs defaultValue="short-term" className="w-full">
+    <Tabs
+      defaultValue="short_term"
+      className="w-full"
+      onValueChange={handleChangeTab}
+    >
       <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="short-term">Top Tracks (last 4 weeks)</TabsTrigger>
-        <TabsTrigger value="medium-term">
+        <TabsTrigger value="short_term">Top Tracks (last 4 weeks)</TabsTrigger>
+        <TabsTrigger value="medium_term">
           Top Tracks (last 6 months)
         </TabsTrigger>
-        <TabsTrigger value="long-term">Top Tracks (all time)</TabsTrigger>
+        <TabsTrigger value="long_term">Top Tracks (all time)</TabsTrigger>
       </TabsList>
-      <TabsContent value="short-term">
+      <TabsContent value="short_term">
         <Card>
           <CardHeader>
             <CardTitle>Top tracks (last 4 weeks)</CardTitle>
@@ -37,12 +92,15 @@ export function Stats({ spotifyToken }: StatsProps) {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <LoadingSkeleton quantity={20} />
+            {shortTermSongs.length === 0 ? (
+              <LoadingSkeleton quantity={20} />
+            ) : (
+              <SongList songs={shortTermSongs} />
+            )}
           </CardContent>
-          <CardFooter></CardFooter>
         </Card>
       </TabsContent>
-      <TabsContent value="medium-term">
+      <TabsContent value="medium_term">
         <Card>
           <CardHeader>
             <CardTitle>Top tracks (last 6 weeks)</CardTitle>
@@ -51,12 +109,16 @@ export function Stats({ spotifyToken }: StatsProps) {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <LoadingSkeleton quantity={20} />
+            {mediumTermSongs.length === 0 ? (
+              <LoadingSkeleton quantity={20} />
+            ) : (
+              <SongList songs={mediumTermSongs} />
+            )}
           </CardContent>
           <CardFooter></CardFooter>
         </Card>
       </TabsContent>
-      <TabsContent value="long-term">
+      <TabsContent value="long_term">
         <Card>
           <CardHeader>
             <CardTitle>Top tracks (all time)</CardTitle>
@@ -65,7 +127,11 @@ export function Stats({ spotifyToken }: StatsProps) {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <LoadingSkeleton quantity={20} />
+            {longTermSongs.length === 0 ? (
+              <LoadingSkeleton quantity={20} />
+            ) : (
+              <SongList songs={longTermSongs} />
+            )}
           </CardContent>
           <CardFooter></CardFooter>
         </Card>
