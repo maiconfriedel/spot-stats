@@ -8,8 +8,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEffect } from "react";
 
-export function Stats() {
+interface StatsProps {
+  spotifyToken: string;
+}
+
+export function Stats({ spotifyToken }: StatsProps) {
+  useEffect(() => {
+    console.log("spotifyToken", spotifyToken);
+  }, []);
+
   return (
     <Tabs defaultValue="short-term" className="w-full">
       <TabsList className="grid w-full grid-cols-3">

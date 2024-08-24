@@ -13,7 +13,7 @@ function App() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [tokenLocalStorageValue, setTokenLocalStorageValue] = useLocalStorage<
-    object | undefined
+    any | undefined
   >("spAuth", undefined);
 
   function handleLogin() {
@@ -47,7 +47,7 @@ function App() {
       <Header />
       <main className="flex items-center justify-start min-h-screen flex-col relative px-8 py-4">
         {tokenLocalStorageValue ? (
-          <Stats />
+          <Stats spotifyToken={tokenLocalStorageValue.access_token} />
         ) : (
           <Login handleLogin={handleLogin} />
         )}
