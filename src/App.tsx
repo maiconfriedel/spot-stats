@@ -13,7 +13,7 @@ function App() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [tokenLocalStorageValue, setTokenLocalStorageValue] = useLocalStorage<
-    any | undefined
+    { access_token: string } | undefined
   >("spAuth", undefined);
 
   function handleLogin() {
@@ -31,16 +31,16 @@ function App() {
       });
   }
 
-  async function getToken() {
-    const token = await authenticateSpotify(searchParams.get("code")!);
-
-    setTokenLocalStorageValue(token);
-    navigate("/");
-  }
-
   useEffect(() => {
     if (searchParams.has("code")) getToken();
-  }, []);
+
+    async function getToken() {
+      const token = await authenticateSpotify(searchParams.get("code")!);
+
+      setTokenLocalStorageValue(token);
+      navigate("/");
+    }
+  }, [searchParams, navigate, setTokenLocalStorageValue]);
 
   return (
     <>
