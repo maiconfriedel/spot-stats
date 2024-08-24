@@ -17,7 +17,7 @@ interface StatsProps {
 export function Stats({ spotifyToken }: StatsProps) {
   useEffect(() => {
     console.log("spotifyToken", spotifyToken);
-  }, []);
+  }, [spotifyToken]);
 
   return (
     <Tabs defaultValue="short-term" className="w-full">
