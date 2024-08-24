@@ -1,4 +1,4 @@
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@/components/ThemeProvider";
 import { Switch } from "@/components/ui/switch";
 import { AudioLines, Moon, Sun } from "lucide-react";
 import { useLocalStorage } from "usehooks-ts";
