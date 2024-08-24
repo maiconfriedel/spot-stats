@@ -1,26 +1,59 @@
-import { AudioLines } from "lucide-react";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import Login from "@/components/Login";
+import { Stats } from "@/components/Stats";
+import { authenticateSpotify } from "@/utils/authenticateSpotify";
+import { generateRandomString } from "@/utils/generateRandomString";
+import querystring from "query-string";
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocalStorage } from "usehooks-ts";
 
 function App() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [tokenLocalStorageValue, setTokenLocalStorageValue] = useLocalStorage<
+    object | undefined
+  >("spAuth", undefined);
+
   function handleLogin() {
-    alert("Login with Spotify");
+    const state = generateRandomString(16);
+    const scope = "user-top-read user-read-recently-played user-read-private";
+
+    window.location.href =
+      "https://accounts.spotify.com/authorize?" +
+      querystring.stringify({
+        response_type: "code",
+        client_id: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
+        scope: scope,
+        redirect_uri: import.meta.env.VITE_CALLBACK_URL,
+        state: state,
+      });
   }
 
+  async function getToken() {
+    const token = await authenticateSpotify(searchParams.get("code")!);
+
+    setTokenLocalStorageValue(token);
+    navigate("/");
+  }
+
+  useEffect(() => {
+    if (searchParams.has("code")) getToken();
+  }, []);
+
   return (
-    <main className="flex items-center justify-center min-h-screen bg-primary flex-col relative pb-4">
-      <div className="flex flex-row items-center justify-center gap-2">
-        <AudioLines strokeWidth={3} size={60} color="white" className="mt-2" />
-        <h1 className="font-bold text-6xl text-secondary">Spot Stats</h1>
-      </div>
-      <span className="font-semibold text-md text-white">
-        Get your statistics from Spotify
-      </span>
-      <button
-        className="bg-secondary text-white rounded-md py-2 px-4 font-bold mt-4 hover:bg-secondary-hover"
-        onClick={handleLogin}
-      >
-        Login with Spotify
-      </button>
-    </main>
+    <>
+      <Header />
+      <main className="flex items-center justify-start min-h-screen flex-col relative px-8 py-4">
+        {tokenLocalStorageValue ? (
+          <Stats />
+        ) : (
+          <Login handleLogin={handleLogin} />
+        )}
+      </main>
+      <Footer />
+    </>
   );
 }
 

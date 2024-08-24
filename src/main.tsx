@@ -1,14 +1,18 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import { StrictMode } from "react";
+import { ThemeProvider } from "@/components/theme-provider";
 import { createRoot } from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+]);
+
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <Header />
-    <App />
-    <Footer />
-  </StrictMode>
+  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <RouterProvider router={router} />
+  </ThemeProvider>
 );
