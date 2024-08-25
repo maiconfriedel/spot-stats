@@ -104,9 +104,9 @@ export function TopTracks({ spotifyToken, spotifyRefreshToken }: StatsProps) {
         <TabsContent value="medium_term">
           <Card>
             <CardHeader>
-              <CardTitle>Top tracks (last 6 weeks)</CardTitle>
+              <CardTitle>Top tracks (last 6 months)</CardTitle>
               <CardDescription>
-                You can view your top tracks from the last 6 weeks here.
+                You can view your top tracks from the last 6 months here.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
