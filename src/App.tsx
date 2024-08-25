@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Login from "@/components/Login";
-import { Stats } from "@/components/Stats";
+import { TopTracks } from "@/components/TopTracks";
 import { authenticateSpotify } from "@/utils/authenticateSpotify";
 import { generateRandomString } from "@/utils/generateRandomString";
 import querystring from "query-string";
@@ -54,7 +54,7 @@ function App() {
       <Header />
       <main className="flex items-center justify-start min-h-screen flex-col relative px-8 py-4">
         {tokenLocalStorageValue ? (
-          <Stats
+          <TopTracks
             spotifyToken={tokenLocalStorageValue.access_token}
             spotifyRefreshToken={tokenLocalStorageValue.refresh_token}
           />
