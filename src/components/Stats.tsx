@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
+import { refreshTokenSpotify } from "@/utils/authenticateSpotify";
 import { getTopSongs, Item } from "@/utils/getTopSongs";
 import { useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
@@ -19,15 +19,14 @@ interface StatsProps {
   spotifyRefreshToken: string;
 }
 
-export function Stats({ spotifyToken }: StatsProps) {
+export function Stats({ spotifyToken, spotifyRefreshToken }: StatsProps) {
   const [shortTermSongs, setShortTermSongs] = useState<Item[]>([]);
   const [mediumTermSongs, setMediumTermSongs] = useState<Item[]>([]);
   const [longTermSongs, setLongTermSongs] = useState<Item[]>([]);
   const [timeRange, setTimeRange] = useState("short_term");
-  const [, , removeTokenLocalStorageValue] = useLocalStorage<
+  const [, setTokenLocalStorage] = useLocalStorage<
     { access_token: string; refresh_token: string } | undefined
   >("spAuth", undefined);
-  const { toast } = useToast();
 
   const getSongs = useMemo(
     () => async () => {
@@ -49,16 +48,16 @@ export function Stats({ spotifyToken }: StatsProps) {
             }
           }
         } catch {
-          removeTokenLocalStorageValue();
-          toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: "Please login with Spotify again.",
+          const token = await refreshTokenSpotify(spotifyRefreshToken);
+
+          setTokenLocalStorage({
+            refresh_token: spotifyRefreshToken,
+            access_token: token.access_token,
           });
         }
       }
     },
-    [spotifyToken, timeRange, removeTokenLocalStorageValue, toast]
+    [spotifyToken, timeRange, setTokenLocalStorage, spotifyRefreshToken]
   );
 
   useEffect(() => {

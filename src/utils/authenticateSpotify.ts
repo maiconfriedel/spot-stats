@@ -26,7 +26,7 @@ export async function authenticateSpotify(code: string) {
   return response.data
 }
 
-export async function refreshToken(refreshToken: string) {
+export async function refreshTokenSpotify(refreshToken: string) {
   const response = await axios.post(
     "https://accounts.spotify.com/api/token",
     querystring.stringify({
