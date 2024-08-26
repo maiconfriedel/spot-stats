@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -127,7 +126,6 @@ export function TopTracks({ spotifyToken, spotifyRefreshToken }: StatsProps) {
                 <SongList songs={mediumTermSongs} />
               )}
             </CardContent>
-            <CardFooter></CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="long_term">
@@ -145,7 +143,6 @@ export function TopTracks({ spotifyToken, spotifyRefreshToken }: StatsProps) {
                 <SongList songs={longTermSongs} />
               )}
             </CardContent>
-            <CardFooter></CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
