@@ -110,8 +110,7 @@ export function TopArtists({
               {shortTermArtists.length === 0 ? (
                 <LoadingSkeletonArtists quantity={20} />
               ) : (
-                <LoadingSkeletonArtists quantity={20} />
-                // <ArtistList artists={shortTermArtists} />
+                <ArtistList artists={shortTermArtists} />
               )}
             </CardContent>
           </Card>
