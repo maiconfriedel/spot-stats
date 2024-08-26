@@ -78,7 +78,6 @@ export function TopTracks({ spotifyToken, spotifyRefreshToken }: StatsProps) {
 
   function handleChangeTab(value: string) {
     setTimeRange(value);
-    getSongs();
   }
 
   return (
