@@ -8,8 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/components/ui/use-toast";
 import { refreshTokenSpotify } from "@/utils/authenticateSpotify";
 import { getTopSongs, Item } from "@/utils/getTopSongs";
+import { AxiosError } from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import SongList from "./SongList";
@@ -27,6 +29,7 @@ export function TopTracks({ spotifyToken, spotifyRefreshToken }: StatsProps) {
   const [, setTokenLocalStorage] = useLocalStorage<
     { access_token: string; refresh_token: string } | undefined
   >("spAuth", undefined);
+  const { toast } = useToast();
 
   const getSongs = useMemo(
     () => async () => {
@@ -47,17 +50,26 @@ export function TopTracks({ spotifyToken, spotifyRefreshToken }: StatsProps) {
                 break;
             }
           }
-        } catch {
-          const token = await refreshTokenSpotify(spotifyRefreshToken);
+        } catch (ex: unknown) {
+          if (ex instanceof AxiosError && ex.response?.status === 401) {
+            const token = await refreshTokenSpotify(spotifyRefreshToken);
 
-          setTokenLocalStorage({
-            refresh_token: spotifyRefreshToken,
-            access_token: token.access_token,
-          });
+            setTokenLocalStorage({
+              refresh_token: spotifyRefreshToken,
+              access_token: token.access_token,
+            });
+          } else {
+            toast({
+              title: "Error",
+              description:
+                "An error occurred while fetching data from Spotify.",
+              variant: "destructive",
+            });
+          }
         }
       }
     },
-    [spotifyToken, timeRange, setTokenLocalStorage, spotifyRefreshToken]
+    [spotifyToken, timeRange, setTokenLocalStorage, spotifyRefreshToken, toast]
   );
 
   useEffect(() => {

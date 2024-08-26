@@ -18,7 +18,7 @@ export default function Header() {
     <div className="bg-black p-3 text-white sticky top-0 z-50 font-bold text-xl flex flex-1 flex-row justify-between items-center">
       <div className="flex flex-row justify-center items-center gap-2">
         <AudioLines strokeWidth={3} size={30} color="white" className="ml-1" />
-        Spot Stats
+        Statify
       </div>
 
       <div className="flex flex-row justify-center items-center gap-2">
