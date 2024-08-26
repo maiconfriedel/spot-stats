@@ -3,33 +3,17 @@ import Header from "@/components/Header";
 import Login from "@/components/Login";
 import { TopTracks } from "@/components/TopTracks";
 import { authenticateSpotify } from "@/utils/authenticateSpotify";
-import { generateRandomString } from "@/utils/generateRandomString";
-import querystring from "query-string";
+
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useLocalStorage } from "usehooks-ts";
 
-function App() {
+function TopTracksPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [tokenLocalStorageValue, setTokenLocalStorageValue] = useLocalStorage<
     { access_token: string; refresh_token: string } | undefined
   >("spAuth", undefined);
-
-  function handleLogin() {
-    const state = generateRandomString(16);
-    const scope = "user-top-read user-read-recently-played user-read-private";
-
-    window.location.href =
-      "https://accounts.spotify.com/authorize?" +
-      querystring.stringify({
-        response_type: "code",
-        client_id: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
-        scope: scope,
-        redirect_uri: import.meta.env.VITE_CALLBACK_URL,
-        state: state,
-      });
-  }
 
   useEffect(() => {
     if (searchParams.has("code")) {
@@ -59,7 +43,7 @@ function App() {
             spotifyRefreshToken={tokenLocalStorageValue.refresh_token}
           />
         ) : (
-          <Login handleLogin={handleLogin} />
+          <Login />
         )}
       </main>
       <Footer />
@@ -67,4 +51,4 @@ function App() {
   );
 }
 
-export default App;
+export default TopTracksPage;

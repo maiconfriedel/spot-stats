@@ -1,10 +1,23 @@
+import { generateRandomString } from "@/utils/generateRandomString";
 import { AudioLines } from "lucide-react";
+import querystring from "query-string";
 
-interface LoginProps {
-  handleLogin: () => void;
-}
+export default function Login() {
+  function handleLogin() {
+    const state = generateRandomString(16);
+    const scope = "user-top-read user-read-recently-played user-read-private";
 
-export default function Login({ handleLogin }: LoginProps) {
+    window.location.href =
+      "https://accounts.spotify.com/authorize?" +
+      querystring.stringify({
+        response_type: "code",
+        client_id: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
+        scope: scope,
+        redirect_uri: import.meta.env.VITE_CALLBACK_URL,
+        state: state,
+      });
+  }
+
   return (
     <>
       <div className="flex flex-row items-center justify-center gap-2">

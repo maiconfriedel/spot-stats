@@ -1,7 +1,8 @@
 import { useTheme } from "@/components/ThemeProvider";
 import { Switch } from "@/components/ui/switch";
-import { AudioLines, Moon, Sun } from "lucide-react";
+import { AudioLines, Menu, Moon, Sun } from "lucide-react";
 import { useLocalStorage } from "usehooks-ts";
+import { Button } from "./ui/button";
 
 export default function Header() {
   const [tokenLocalStorageValue, setTokenLocalStorageValue] = useLocalStorage<
@@ -17,6 +18,9 @@ export default function Header() {
   return (
     <div className="bg-black p-3 text-white sticky top-0 z-50 font-bold text-xl flex flex-1 flex-row justify-between items-center">
       <div className="flex flex-row justify-center items-center gap-2">
+        <Button variant="ghost">
+          <Menu />
+        </Button>
         <AudioLines strokeWidth={3} size={30} color="white" className="ml-1" />
         Statify
       </div>

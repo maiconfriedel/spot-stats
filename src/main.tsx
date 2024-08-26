@@ -3,13 +3,19 @@ import { Toaster } from "@/components/ui/toaster";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import App from "./App";
+import TopArtistsPage from "@/pages/TopArtistsPage";
+import TopTracksPage from "@/pages/TopTracksPage";
+
 import "./index.css";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <TopTracksPage />,
+  },
+  {
+    path: "/artists",
+    element: <TopArtistsPage />,
   },
 ]);
 
