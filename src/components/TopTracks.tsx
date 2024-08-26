@@ -13,7 +13,7 @@ import { getTopSongs, Item } from "@/utils/getTopSongs";
 import { AxiosError } from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import SongList from "./SongList";
+import TrackList from "./TrackList";
 
 interface TopTracksProps {
   spotifyToken: string;
@@ -109,7 +109,7 @@ export function TopTracks({
               {shortTermSongs.length === 0 ? (
                 <LoadingSkeleton quantity={20} />
               ) : (
-                <SongList songs={shortTermSongs} />
+                <TrackList songs={shortTermSongs} />
               )}
             </CardContent>
           </Card>
@@ -126,7 +126,7 @@ export function TopTracks({
               {mediumTermSongs.length === 0 ? (
                 <LoadingSkeleton quantity={20} />
               ) : (
-                <SongList songs={mediumTermSongs} />
+                <TrackList songs={mediumTermSongs} />
               )}
             </CardContent>
           </Card>
@@ -143,7 +143,7 @@ export function TopTracks({
               {longTermSongs.length === 0 ? (
                 <LoadingSkeleton quantity={20} />
               ) : (
-                <SongList songs={longTermSongs} />
+                <TrackList songs={longTermSongs} />
               )}
             </CardContent>
           </Card>

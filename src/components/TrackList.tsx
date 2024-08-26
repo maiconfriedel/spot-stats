@@ -4,7 +4,7 @@ interface SongListProps {
   songs: Item[];
 }
 
-export default function SongList({ songs }: SongListProps) {
+export default function TrackList({ songs }: SongListProps) {
   function openSpotifySongPage(destination: string) {
     window.open(destination, "_blank");
   }
