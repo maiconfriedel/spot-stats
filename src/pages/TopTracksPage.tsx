@@ -1,12 +1,13 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import Login from "@/components/Login";
-import { TopTracks } from "@/components/TopTracks";
-import { authenticateSpotify } from "@/utils/authenticateSpotify";
-
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useLocalStorage } from "usehooks-ts";
+
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import Login from "@/components/Login";
+import TopTracks from "@/components/TopTracks";
+
+import { authenticateSpotify } from "@/utils/authenticateSpotify";
 
 function TopTracksPage() {
   const [searchParams] = useSearchParams();

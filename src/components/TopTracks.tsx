@@ -1,3 +1,7 @@
+import { AxiosError } from "axios";
+import { useEffect, useMemo, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
+
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import {
   Card,
@@ -8,19 +12,18 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
+
+import TrackList from "./TrackList";
+
 import { refreshTokenSpotify } from "@/utils/authenticateSpotify";
 import { getTopSongs, Item } from "@/utils/getTopSongs";
-import { AxiosError } from "axios";
-import { useEffect, useMemo, useState } from "react";
-import { useLocalStorage } from "usehooks-ts";
-import TrackList from "./TrackList";
 
 interface TopTracksProps {
   spotifyToken: string;
   spotifyRefreshToken: string;
 }
 
-export function TopTracks({
+export default function TopTracks({
   spotifyToken,
   spotifyRefreshToken,
 }: TopTracksProps) {

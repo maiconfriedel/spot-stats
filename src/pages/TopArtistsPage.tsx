@@ -1,8 +1,9 @@
+import { useLocalStorage } from "usehooks-ts";
+
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Login from "@/components/Login";
-import { TopArtists } from "@/components/TopArtists";
-import { useLocalStorage } from "usehooks-ts";
+import TopArtists from "@/components/TopArtists";
 
 function TopArtistsPage() {
   const [tokenLocalStorageValue] = useLocalStorage<

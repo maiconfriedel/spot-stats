@@ -1,6 +1,7 @@
-import { generateRandomString } from "@/utils/generateRandomString";
 import { AudioLines } from "lucide-react";
 import querystring from "query-string";
+
+import { generateRandomString } from "@/utils/generateRandomString";
 
 export default function Login() {
   function handleLogin() {

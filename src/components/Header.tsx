@@ -1,17 +1,20 @@
-import { useTheme } from "@/components/ThemeProvider";
-import { Switch } from "@/components/ui/switch";
-import { cn } from "@/utils";
 import { AudioLines, Menu, Moon, Sun } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLocalStorage } from "usehooks-ts";
-import { Button } from "./ui/button";
+
+import { useTheme } from "@/components/ThemeProvider";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet";
+} from "@/components/ui/sheet";
+import { Switch } from "@/components/ui/switch";
+
+import { cn } from "@/utils";
 
 export default function Header() {
   const [tokenLocalStorageValue, setTokenLocalStorageValue] = useLocalStorage<
@@ -31,13 +34,14 @@ export default function Header() {
       <div className="flex flex-row justify-center items-center gap-2">
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" className="gap-2 sm:hidden flex">
+            <Button variant="ghost" className="gap-2 md:hidden flex">
               <Menu />
             </Button>
           </SheetTrigger>
           <SheetContent side="left">
             <SheetHeader className="mb-4">
               <SheetTitle>Menu</SheetTitle>
+              <Separator />
             </SheetHeader>
             <div className="flex flex-col gap-y-4">
               <Button
@@ -56,6 +60,15 @@ export default function Header() {
               >
                 Top Artists
               </Button>
+              <Button
+                variant="ghost"
+                className={`${
+                  pathname === "/recent" ? "font-bold bg-zinc-500" : ""
+                }`}
+                onClick={() => nav("/recent")}
+              >
+                Recently played
+              </Button>
               <div className="flex flex-row gap-2 items-center fixed bottom-0 mb-4">
                 <Sun className="text-primary" size={20} />
                 <Switch
@@ -73,7 +86,7 @@ export default function Header() {
         <Button
           variant="ghost"
           className={`${cn(
-            "hidden sm:flex",
+            "hidden md:flex",
             pathname === "/" ? "font-bold bg-zinc-800" : ""
           )}`}
           onClick={() => nav("/")}
@@ -83,17 +96,27 @@ export default function Header() {
         <Button
           variant="ghost"
           className={`${cn(
-            "hidden sm:flex",
+            "hidden md:flex",
             pathname === "/artists" ? "font-bold bg-zinc-800" : ""
           )}`}
           onClick={() => nav("/artists")}
         >
           Top Artists
         </Button>
+        <Button
+          variant="ghost"
+          className={`${cn(
+            "hidden md:flex",
+            pathname === "/recent" ? "font-bold bg-zinc-800" : ""
+          )}`}
+          onClick={() => nav("/recent")}
+        >
+          Recently played
+        </Button>
       </div>
 
       <div className="flex flex-row justify-center items-center gap-2">
-        <div className="flex-row gap-2 justify-center items-center hidden sm:flex">
+        <div className="flex-row gap-2 justify-center items-center hidden md:flex">
           <Sun color="white" size={20} />
           <Switch
             checked={theme === "dark"}
