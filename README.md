@@ -1,6 +1,6 @@
 # Statify
 
-### View your Spotify top tracks in 3 time ranges 📈🎶
+### View your Spotify statistics, like top tracks, top artists and recently listened songs 📈🎶
 
 Just login with Spotify and see the stats ✨📈
 
